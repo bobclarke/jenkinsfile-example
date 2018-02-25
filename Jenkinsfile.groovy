@@ -10,7 +10,7 @@ println "\nJSON PAYLOAD : "+env.payload
 
 if( payload.ref == "manually_triggered" ){
     println "\nManual triggering not currently supported, please trigger this job from a githook"
-    exit(1)
+    System.exit(1)
 }
 
 def branchName = payload.ref
