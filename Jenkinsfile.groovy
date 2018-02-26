@@ -8,11 +8,6 @@ def payload = new JsonSlurperClassic().parseText(env.payload)
 println "BUILD_ID IS: " +env.BUILD_ID
 println "\nJSON PAYLOAD : "+env.payload
 
-if( payload.ref == "manually_triggered" ){
-    println "\nManual triggering not currently supported, please trigger this job from a githook"
-    System.exit(1)
-}
-
 def branchName = payload.ref
 def projectName = payload.repository.name
 def artifactName = "${projectName}"
@@ -186,6 +181,11 @@ switch (eventType) {
         tagArtifact( env.BUILD_ID + "_mock", projectName, localArtifactPath, artifactName + ".mock", nexusRepo, nexusUser, nexusPass, tag, "Publish mocked artifact" )
         tagArtifact( env.BUILD_ID + "_live", projectName, localArtifactPath, artifactName + ".live", nexusRepo, nexusUser, nexusPass, tag, "Publish live artifact" )
         break;
+    
+    case "manally_triggered":
+        println "\nManual triggering not currently supported, please trigger this job from a githook"
+        currentBuild.displayName = "Manual trigger ignored"
+    
 
     default:
       println "Git event ignored";
